@@ -768,7 +768,6 @@ extend(SVGElement.prototype, /** @lends Highcharts.SVGElement.prototype */ {
 			newStyles = {},
 			elem = this.element,
 			textWidth,
-			serializedCss = '',
 			hyphenate,
 			hasNew = !oldStyles,
 			// These CSS properties are interpreted internally by the SVG
@@ -817,25 +816,21 @@ extend(SVGElement.prototype, /** @lends Highcharts.SVGElement.prototype */ {
 				delete styles.width;
 			}
 
-			// serialize and set style attribute
-			if (isMS && !svg) {
-				css(this.element, styles);
-			} else {
-				hyphenate = function (a, b) {
-					return '-' + b.toLowerCase();
-				};
-				objectEach(styles, function (style, n) {
-					if (inArray(n, svgPseudoProps) === -1) {
-						serializedCss +=
-						n.replace(/([A-Z])/g, hyphenate) + ':' +
-						style + ';';
-					}
-				});
-				if (serializedCss) {
-					attr(elem, 'style', serializedCss); // #1881
-				}
-			}
-
+			// apply styles
+            if (isMS && !svg) {
+                css(this.element, styles);
+            } else {
+                hyphenate = function(a, b) {
+                    return '-' + b.toLowerCase();
+                };
+                var resultStyles = {};
+                objectEach(styles, function(style, n) {
+                    if (inArray(n, svgPseudoProps) === -1) {
+                        resultStyles[n.replace(/([A-Z])/g, hyphenate)] = style;
+                    }
+                });
+                css(elem, resultStyles);
+            }            
 
 			if (this.added) {
 
