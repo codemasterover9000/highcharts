@@ -817,20 +817,20 @@ extend(SVGElement.prototype, /** @lends Highcharts.SVGElement.prototype */ {
 			}
 
 			// apply styles
-            if (isMS && !svg) {
-                css(this.element, styles);
-            } else {
-                hyphenate = function(a, b) {
-                    return '-' + b.toLowerCase();
-                };
-                var resultStyles = {};
-                objectEach(styles, function(style, n) {
-                    if (inArray(n, svgPseudoProps) === -1) {
-                        resultStyles[n.replace(/([A-Z])/g, hyphenate)] = style;
-                    }
-                });
-                css(elem, resultStyles);
-            }            
+			if (isMS && !svg) {
+				css(this.element, styles);
+			} else {
+				hyphenate = function(a, b) {
+					return '-' + b.toLowerCase();
+				};
+				var resultStyles = {};
+				objectEach(styles, function(style, n) {
+					if (inArray(n, svgPseudoProps) === -1) {
+						resultStyles[n.replace(/([A-Z])/g, hyphenate)] = style;
+					}
+				});
+				css(elem, resultStyles);
+			}
 
 			if (this.added) {
 
