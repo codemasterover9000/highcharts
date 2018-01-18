@@ -1596,9 +1596,8 @@ Chart.prototype.inlineStyles = function () {
 	function recurse(node) {
 		var styles,
 			parentStyles,
-			cssText = '',
+			appliedStyles = {},
 			dummy,
-			styleAttr,
 			blacklisted,
 			whitelisted,
 			i;
@@ -1637,7 +1636,7 @@ Chart.prototype.inlineStyles = function () {
 						node.setAttribute(hyphenate(prop), val);
 					// Styles
 					} else {
-						cssText += hyphenate(prop) + ':' + val + ';';
+						appliedStyles[hyphenate(prop)] = val;
 					}
 				}
 			}
@@ -1671,10 +1670,7 @@ Chart.prototype.inlineStyles = function () {
 			}
 
 			// Apply styles
-			if (cssText) {
-				styleAttr = node.getAttribute('style');
-				node.setAttribute('style', (styleAttr ? styleAttr + ';' : '') + cssText);
-			}
+			css(node, appliedStyles);
 
 			// Set default stroke width (needed at least for IE)
 			if (node.nodeName === 'svg') {
